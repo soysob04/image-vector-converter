@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Image to Vector Converter</title>
+</head>
+<body>
+  <h2>Image to Vector Converter (Demo)</h2>
+
+  <!-- Upload input -->
+  <input type="file" id="imageInput" accept="image/*" />
+  <br /><br />
+
+  <!-- Display uploaded image -->
+  <div id="imagePreview"></div>
+  <br />
+
+  <!-- Display SVG (demo static SVG for now) -->
+  <h3>Generated SVG Preview:</h3>
+  <div id="svgPreview" style="border:1px solid #ccc; padding:10px; width:300px; height:300px;"></div>
+  <br />
+
+  <!-- Download SVG button -->
+  <button id="downloadSvgBtn">Download SVG</button>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const svgPreview = document.getElementById('svgPreview');
+    const downloadSvgBtn = document.getElementById('downloadSvgBtn');
+
+    // Static sample SVG content (replace with actual conversion output if available)
+    const sampleSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+      <rect width="200" height="200" fill="white"/>
+      <circle cx="100" cy="100" r="80" fill="black" />
+    </svg>`;
+
+    imageInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Show uploaded image preview
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.innerHTML = `<img src="${e.target.result}" style="max-width:300px; max-height:300px;" />`;
+      };
+      reader.readAsDataURL(file);
+
+      // For demo, show static SVG preview
+      svgPreview.innerHTML = sampleSvg;
+    });
+
+    downloadSvgBtn.addEventListener('click', () => {
+      // Create a blob of SVG content and trigger download
+      const blob = new Blob([sampleSvg], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'output.svg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
